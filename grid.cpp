@@ -20,12 +20,16 @@ grid::grid()
     neighbourhoodSize =1;
     rowCount=rows;
     colCount=cols;
+    //trycell = new PreyCell();
     //theGrid = NULL;
     theGrid = new cell*[rowCount];
     for(int i = 0;i<rowCount; i++){
         theGrid[i]= new cell[colCount];
         for(int j = 0;j<colCount; j++){
-            theGrid[i][j].SetRegular();
+            trycell = new PreyCell();
+            theGrid[i][j] = *trycell;
+            qDebug() << theGrid[i][j].color[0] << " " << theGrid[i][j].color[1];
+//            theGrid[i][j].SetRegular();
         }
     }
 
@@ -42,8 +46,21 @@ grid::grid(int col,int row )
     cellsDeleted = 0;
     neighbourhoodSize =1;
     theGrid = new cell*[colCount];
-    for(int i = 0;i<colCount; i++)
+    for(int i = 0;i<colCount; i++){
         theGrid[i]= new cell[rowCount];
+        for(int j = 0; j<rowCount; j++){
+//            cell * cellptr = new PreyCell();
+            cell * cellptr = new cell();
+            theGrid[i][j]= *cellptr ;
+
+//            qDebug() << theGrid[i][j].color[0] << " " << theGrid[i][j].color[1];
+//            cellptr->color[0] = 255;
+//            cellptr->color[1] = 255;
+//            cellptr->color[2] = 255;
+        }
+//    theGrid[i]= new PreyCell[rowCount];
+
+    }
 
 }
 
@@ -144,6 +161,24 @@ void grid::CountStatusInNeighbourdhoods(int thisCellStatus, int theStatusUnderCo
     }
 
 }
+
+
+/*PopulateGrid: ---------------------------
+
+  type = 1 -> create preyType
+  type = 2 -> create
+
+----------------------------------*/
+
+void PopulateGridRandomly(int type, int number){
+
+    if(type == 1){}
+
+
+    if(1){}
+
+}
+
 
 
 /*NextTurn: ---------------------------

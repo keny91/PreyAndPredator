@@ -2,7 +2,9 @@
 #define GRID_H
 
 
-#include "cell.h"
+#include "preycell.h"
+//#include "cell.h"
+
 #include <iostream>
 #include <QDebug>
 
@@ -20,7 +22,10 @@ public:
     int neighbourhoodSize;
     int cellsDeleted; //DEBUG
     cell **theGrid;
+    PreyCell * trycell;
+
     void InitGrid();
+    void PopulateGrid(int type, int number);
     void NextTurn();
     void CountCells();
     void CountStatusInNeighbourdhoods(int thisCellStatus, int theStatusUnderCount);

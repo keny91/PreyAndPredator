@@ -37,10 +37,12 @@ LIBS += -LC:\\openCV3\\opencv\\MyBuild\\install\\x64\\vc14\\lib\
 SOURCES += main.cpp\
         mainwindow.cpp \
     grid.cpp \
-    cell.cpp
+    cell.cpp \
+    preycell.cpp
 
 HEADERS  += mainwindow.h \
     grid.h \
-    cell.h
+    cell.h \
+    preycell.h
 
 FORMS    += mainwindow.ui
