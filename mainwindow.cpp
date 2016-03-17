@@ -7,7 +7,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    myGrid = new grid(300,200);
+    myGrid = new grid(300,300);
     image= Mat(myGrid->rowCount,myGrid->colCount,CV_8UC3, Scalar(0, 0, 0));
     //Mat  image =  Mat( Mat::zeros(myGrid->rowCount, myGrid->colCount, CV_32F) );
     qDebug()<< "Mat created";
@@ -24,9 +24,14 @@ MainWindow::MainWindow(QWidget *parent) :
     /*Infectation spread:----------
             Paint the image according to the grid cells.
     ---------------------------*/
-    myGrid->theGrid[1][1].SetInfected();
-
-
+    //myGrid->theGrid[1][1].SetInfected();
+  myGrid->InitGridWithStandardCells();
+//    qDebug()<< "myGrid" << myGrid->theGrid[0][0].status;
+//    qDebug()<< "myGrid2" << myGrid->theGrid[1][0].status;
+//    qDebug()<< "myGrid3" << myGrid->theGrid[2][0].status;
+//    qDebug()<< "myGrid4" << myGrid->theGrid[3][0].status;
+//    qDebug()<< "myGrid5" << myGrid->theGrid[4][0].status;
+//    qDebug()<< "myGrid6" << myGrid->theGrid[5][0].status;
 }
 
 
@@ -132,6 +137,7 @@ void MainWindow::Refreshing(){
     image= Mat(myGrid->rowCount,myGrid->colCount,CV_8UC3, Scalar(0, 0, 0));
 
     qDebug()<< "Image Assingned";
+    qDebug()<< "myGrid->COunt prey" << myGrid->CountPrey;
     //Sleep(500);
 }
 

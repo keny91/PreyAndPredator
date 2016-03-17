@@ -1,22 +1,37 @@
 #include "grid.h"
 
 
+/*-----Process Order:
+1st-> Check&Count STATUSW around a regular cell
+2nd-> Breed.
+3rd-> Die
+4th-> Recount
+-> Next Round (next generation)
+----------------------------*/
+
+
+/*-----OPTION 2:
+1st-> Check&Count STATUSW around a regular cell
+2nd-> Breed,... Die...  (only empty cells can breed)
+3RD-> Recount
+-> Next Round (next generation)
+----------------------------*/
+
 
 /*---------------------------
 CONSTRUCTORS; default grid 15x15
 ----------------------------*/
 
-
-
 grid::grid()
 {
+    randSeed = 0;
     cellsDeleted = 0;
     turnsCount = 0;
     int cols = 15;
     int rows = 15;
-    CountLife=0;
-    CountDeath =0;
-    CountInfected = 0;
+    CountEmpty=0;
+    CountPredator =0;
+    CountPrey = 0;
     neighbourhoodSize =1;
     rowCount=rows;
     colCount=cols;
@@ -25,21 +40,22 @@ grid::grid()
     theGrid = new cell*[rowCount];
     for(int i = 0;i<rowCount; i++){
         theGrid[i]= new cell[colCount];
-        for(int j = 0;j<colCount; j++){
-            trycell = new PreyCell();
-            theGrid[i][j] = *trycell;
-            qDebug() << theGrid[i][j].color[0] << " " << theGrid[i][j].color[1];
+//        for(int j = 0;j<colCount; j++){
+//            trycell = new PreyCell();
+//            theGrid[i][j] = *trycell;
+//            qDebug() << theGrid[i][j].color[0] << " " << theGrid[i][j].color[1];
 //            theGrid[i][j].SetRegular();
-        }
+//        }
     }
 
 }
 
 grid::grid(int col,int row )
 {
-    CountLife=0;
-    CountDeath =0;
-    CountInfected = 0;
+    randSeed=0;
+    CountEmpty=0;
+    CountPredator =0;
+    CountPrey = 0;
     rowCount=row;
     colCount=col;
     turnsCount = 0;
@@ -48,16 +64,27 @@ grid::grid(int col,int row )
     theGrid = new cell*[colCount];
     for(int i = 0;i<colCount; i++){
         theGrid[i]= new cell[rowCount];
-        for(int j = 0; j<rowCount; j++){
+//        for(int j = 0; j<rowCount; j++){
 //            cell * cellptr = new PreyCell();
-            cell * cellptr = new cell();
-            theGrid[i][j]= *cellptr ;
+
+////            cellptr->SetInfected();
+////            cell * Vec3b color = theGrid.at<cell[][]>(Point(i,j));
+////            cell * cellptr = new cell();
+//            PreyCell * cellptr2 = &theGrid[i][j];
+////            theGrid[i][j]= *cellptr;
+////             = cellptr;
+//            //cellptr2 = cellptr;
+////            theGrid[i][j]=()
+////            theGrid.at<>(cell(i,j))= cellptr;
+////            ((PreyCell*)&theGrid[i][j])->SetInfected();
+//            theGrid[i][j].SetInfected();
+
 
 //            qDebug() << theGrid[i][j].color[0] << " " << theGrid[i][j].color[1];
 //            cellptr->color[0] = 255;
 //            cellptr->color[1] = 255;
 //            cellptr->color[2] = 255;
-        }
+//        }
 //    theGrid[i]= new PreyCell[rowCount];
 
     }
@@ -65,39 +92,108 @@ grid::grid(int col,int row )
 }
 
 
-/*---------------------------
 
+
+
+
+/*PopulateGrid--------------------------
+During the start of the program we will create a Grid and initialize it with different and
+randomly distributed kinds of samples.
 ----------------------------*/
-void grid::InitGrid(){
+void grid::PopulateGrid(int type, int number){
+    int vertical;
+    QTime now = QTime::currentTime();
+    int horizontal;
+    for(int i = 0; i < number;  i++ ){
+        QTime now = QTime::currentTime();
+        qsrand(now.msec()+randSeed + qrand());
+        randSeed++;
+        horizontal = qrand()% colCount;  //maybe is not + 1
+        qsrand(now.msec()+randSeed + qrand());
+        randSeed++;
+        vertical = qrand()% rowCount;
 
-    for(int i=0; i<rowCount; i++){
-        for(int j=0; j<colCount;j++){
-            theGrid[i][j] = cell();
-            theGrid[i][j].SetRegular();
-        }
+        // Case 1: the cell is empty
+//        qDebug()<<"Selected Cell is: " << horizontal << " " << vertical;
+//        qDebug() << i;
+        if(theGrid[horizontal][vertical].isEmpty()){
+                switch (type) {
+                    case 1:  //case prey
+                        theGrid[horizontal][vertical].SetPrey();
+//                        qDebug()<<"It´s a prey";
+//                        qDebug()<<"-----------";
+                        break;
+
+                    case 2:  //case predator
+                        theGrid[horizontal][vertical].SetPredator();
+//                        qDebug()<<"It´s a predat";
+                        break;
+
+                    default: // remain empty
+                        theGrid[horizontal][vertical].SetEmpty();
+                        break;
+                }
+            }
+                        // Case 2: the cell is populated so we look for a new one. So we repeat again.
+         else{
+//            qDebug() << "Cell not empty";
+//            qDebug()<<"-----------";
+            i--;
+         }
+
+    // reset seed in case it goes too large for int format
+            if (randSeed > 30000)
+                randSeed = 0;
     }
+}
 
+
+
+
+
+
+
+/*---------------------------
+InitGridWithStandardCells: this is the default call to initialize de grid
+with 50% preys and 25% predators
+----------------------------*/
+void grid::InitGridWithStandardCells(){
+    double TotalNumber = rowCount * colCount;
+    int NumberOfPredators = round(TotalNumber*0.25);
+    int NumberOfPreys = round(TotalNumber*0.5);
+    qDebug()<< "Generating Grid";
+    qDebug()<<" Total Number of Samples: " <<round(TotalNumber);
+    qDebug()<<" estimated number of preys: " <<NumberOfPreys;
+    qDebug()<<" estimated number of Predators: " <<NumberOfPredators;
+    PopulateGrid(1,NumberOfPreys);  //Adds prey
+    PopulateGrid(2,NumberOfPredators);  //Adds predator
+
+    CountEmpty=0;
+    CountPredator =0;
+    CountPrey = 0;
+    qDebug()<<"Exit Initialization";
 }
 
 
 
 
 /*CountCells--------------------
-
+A recount of the every possible cell status
 ----------------------------*/
 void grid::CountCells(){
-    CountLife=0;
-    CountDeath =0;
-    CountInfected = 0;
+
+    CountEmpty=0;
+    CountPredator =0;
+    CountPrey = 0;
 
     for(int i=0; i<colCount; i++){
         for(int j=0; j<rowCount;j++){
-            if(theGrid[i][j].state ==0)
-                CountLife++;
-            else if(theGrid[i][j].state ==1)
-                CountInfected++;
-            else if(theGrid[i][j].state ==2)
-                CountDeath++;
+            if(theGrid[i][j].status ==0)
+                CountEmpty++;
+            else if(theGrid[i][j].status ==1)
+                CountPrey++;
+            else if(theGrid[i][j].status ==2)
+                CountPredator++;
         }
     }
 
@@ -107,13 +203,16 @@ void grid::CountCells(){
 ONLY WORKS FOR NEIGHBOURDHOOD = 1
 counts the number
 ----------------------------*/
-void grid::CountStatusInNeighbourdhoods(int thisCellStatus, int theStatusUnderCount){
-    int count = 0;
+void grid::CountStatusInNeighbourdhoods(){
+    int countPreds, countPreys, countEmptys= 0;
     //Go 1-by-1
     for(int i=0; i<colCount; i++){
         for(int j=0; j<rowCount;j++){
-             count = 0;
-             if(theGrid[i][j].state == thisCellStatus){
+             countPreds = 0;
+             countPreys = 0;
+             countEmptys = 0;
+
+//             if(theGrid[i][j].status == thisCellStatus){
 
              //Set parameters
              // EXCEPTIONS OUT OF GRID -> need 4 exceptions
@@ -144,16 +243,27 @@ void grid::CountStatusInNeighbourdhoods(int thisCellStatus, int theStatusUnderCo
                 // loop in the neighboorhood
                  for(int a=initI; a<=finalI; a++){
                      for(int b=initJ; b<=finalJ;b++){
-                         if(theGrid[a][b].state == theStatusUnderCount)
-                             count++;
+                         if(theGrid[a][b].status == 1)
+                             countPreys++;
+                         else if(theGrid[a][b].status == 2)
+                             countPreds++;
+                         else
+                             countEmptys++;
                       }
                      }
-                 if(theStatusUnderCount == 1)
-                    theGrid[i][j].InfectedCellsInNeighboorhood = count;
-                 else if(theStatusUnderCount == 0)
-                    theGrid[i][j].HealthyCellsInNeighboorhood = count;
-                count = 0;
-             }
+
+                 // Since we are including the Cell status as part of the neighbourhood
+                 if(theGrid[i][j].status == 1)
+                     countPreys--;
+                 else if(theGrid[i][j].status == 2)
+                     countPreds --;
+                 else
+                     countEmptys--;
+
+                    theGrid[i][j].predatorsInNeighbourhood = countPreds;
+                    theGrid[i][j].preyInNeighbourhood = countPreys;
+
+//             }
 
 
 
@@ -163,22 +273,6 @@ void grid::CountStatusInNeighbourdhoods(int thisCellStatus, int theStatusUnderCo
 }
 
 
-/*PopulateGrid: ---------------------------
-
-  type = 1 -> create preyType
-  type = 2 -> create
-
-----------------------------------*/
-
-void PopulateGridRandomly(int type, int number){
-
-    if(type == 1){}
-
-
-    if(1){}
-
-}
-
 
 
 /*NextTurn: ---------------------------
@@ -186,15 +280,13 @@ void PopulateGridRandomly(int type, int number){
 ----------------------------------*/
 void grid::NextTurn(){
 
-    CountStatusInNeighbourdhoods(0, 1); //count infected around
-    CountStatusInNeighbourdhoods(0, 0); //count healthy around
-    // roll infections
+    CountStatusInNeighbourdhoods(); //count all cell´s neighbours
+    //CountStatusInNeighbourdhoods(0, 0); //count healthy around
+//    Do for all cells in the grid
     for(int i = 0; i < colCount;i++){
         for(int j = 0; j< rowCount;j++){
-            if(theGrid[i][j].state == 0)
-                theGrid[i][j].GetsInfectedRoll();
-            else if (theGrid[i][j].state == 1)
-                theGrid[i][j].IncreaseInfection();
+            theGrid[i][j].Breed();
+            theGrid[i][j].Dies(randSeed);
         }
     }
 

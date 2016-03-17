@@ -2,13 +2,16 @@
 #define GRID_H
 
 
-#include "preycell.h"
-//#include "cell.h"
 
+#include "cell.h"
+#include <QTime>
+#include <windows.h>
 #include <iostream>
 #include <QDebug>
 
-//using namespace std;
+
+
+using namespace std;
 
 //class cell;
 
@@ -18,17 +21,19 @@ public:
 
     int rowCount, colCount;
     int turnsCount;
-    int CountLife, CountDeath, CountInfected;
+    int CountEmpty, CountPrey, CountPredator;
     int neighbourhoodSize;
     int cellsDeleted; //DEBUG
-    cell **theGrid;
-    PreyCell * trycell;
+    int randSeed;
 
-    void InitGrid();
+    cell **theGrid;
+//    PreyCell * trycell;
+
+    void InitGridWithStandardCells();
     void PopulateGrid(int type, int number);
     void NextTurn();
     void CountCells();
-    void CountStatusInNeighbourdhoods(int thisCellStatus, int theStatusUnderCount);
+    void CountStatusInNeighbourdhoods();
     grid(int row, int col);
     grid();
 

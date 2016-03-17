@@ -18,21 +18,57 @@ public:
     cell();
     ~cell();
 
-    int state;
-    int PropagationProbability, InfectedCellsInNeighboorhood,HealthyCellsInNeighboorhood;
-    int TurnsInfected,  LifeSpanTurns, RollLimit;
+
+    int age;
+    int BreedingAge;
+    int OldAge;
+    int BreedingNeighboursRequired;
+    int BreedingNeighboursRequiredOnAge;
+    int status;
+    double RandomDeathProbability;
+    int TurnsInfected, RollLimit;
     int* color;
-    void GetsInfectedRoll();
-    void SetInfected();
-    void SetDeath();
-    void SetRegular();
-    void IncreaseInfection();
-    void Createneighbourdhood(); // to avoid reading 1 by one
-    void CountInfectedNeighbourhood(int count);
+
+    //Neighbourhood operations
+    int predatorsInNeighbourhood;
+    int preyInNeighbourhood;
+    int maturePreyInNeighbourhood;
+    int maturePredatorInNeighbourhood;
+    int EmptyInNeighbourhood;
 
 
+
+
+    void SetPredator();
+    void SetPrey();
+    void SetEmpty();
+
+    //CheckType
+    bool isPredator();
+    bool isPrey();
+    bool isEmpty();
+
+    bool isOld(int age);
+
+    // self operations
+    void Dies(int r);
+    void IncreaseAge(int generation);
     void Breed();
-    void Death();
+    void getOlder(); // = increaseInfection
+    bool GetsRandomDeathRoll(int r, int rollLim);
+
+
+
+//    int state;
+//    int PropagationProbability, InfectedCellsInNeighboorhood,HealthyCellsInNeighboorhood;
+//    int TurnsInfected,  LifeSpanTurns, RollLimit;
+//    int* color;
+
+//    void GetsInfectedRoll();
+//    void SetInfected();
+//    void SetDeath();
+//    void SetRegular();
+//    void IncreaseInfection();
 
 
 };
