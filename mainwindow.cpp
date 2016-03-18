@@ -8,16 +8,17 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     myGrid = new grid(300,300);
+
     image= Mat(myGrid->rowCount,myGrid->colCount,CV_8UC3, Scalar(0, 0, 0));
     //Mat  image =  Mat( Mat::zeros(myGrid->rowCount, myGrid->colCount, CV_32F) );
-    qDebug()<< "Mat created";
+//    qDebug()<< "Mat created";
     QTimer *mytimer = new QTimer(this);
 //    MainWindow::timer->setInterval(300);
 
 //        _release_timer.start();
     connect(mytimer, SIGNAL(timeout()), this,SLOT(Refreshing()));
     mytimer->start(300);
-    qDebug()<< "Start Color Assingment" ;
+//    qDebug()<< "Start Color Assingment" ;
 
 
 
@@ -26,6 +27,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ---------------------------*/
     //myGrid->theGrid[1][1].SetInfected();
   myGrid->InitGridWithStandardCells();
+//  myGrid->theGrid[22][22].SetEmpty();
 //    qDebug()<< "myGrid" << myGrid->theGrid[0][0].status;
 //    qDebug()<< "myGrid2" << myGrid->theGrid[1][0].status;
 //    qDebug()<< "myGrid3" << myGrid->theGrid[2][0].status;
@@ -50,7 +52,7 @@ void MainWindow::RePaintIm(){
     int r = 0;
     int c = 0;
 
-    qDebug()<< "Start Color Assingment" ;
+//    qDebug()<< "Start Color Assingment" ;
     for(int i = 0; i < myGrid->colCount;i++){
         for(int j = 0; j< myGrid->rowCount;j++){
                 cv::Vec3b color = image.at<Vec3b>(Point(i,j)); // heeeere
@@ -69,7 +71,7 @@ void MainWindow::RePaintIm(){
     c=0;
     r++;
     }
-    qDebug()<< "End Color Assingment";
+//    qDebug()<< "End Color Assingment";
 
 
 }
@@ -87,19 +89,19 @@ void MainWindow::ReSizeIm(){
     double Rows =  (double)myGrid->rowCount;
     double Proportion;
 
-    qDebug()<< "Start of Resize";
+//    qDebug()<< "Start of Resize";
     //CASE 1: y > x
     if (myGrid->rowCount >= myGrid->colCount){
 
         Proportion = (Cols/Rows);
         imageSizeY = MaxLenght;
         fy = imageSizeY/myGrid->rowCount;
-        qDebug()<< "Y:" << imageSizeY;
-        qDebug()<< "fy:" << fy;
+//        qDebug()<< "Y:" << imageSizeY;
+//        qDebug()<< "fy:" << fy;
         imageSizeX = imageSizeY*Proportion;
-        qDebug()<< "Proportion: "<< Proportion;
+//        qDebug()<< "Proportion: "<< Proportion;
         fx = imageSizeX/myGrid->colCount;
-        qDebug()<< "X:" << imageSizeX;
+//        qDebug()<< "X:" << imageSizeX;
         cv::resize(image,image,Size(),fy,fy,INTER_AREA );
 
 
@@ -109,18 +111,18 @@ void MainWindow::ReSizeIm(){
         Proportion = (Rows/Cols);
         imageSizeX = MaxLenght;
         fx = imageSizeX/myGrid->colCount;
-        qDebug()<< "X:" << imageSizeX;
-        qDebug()<< "fx:" << fx;
+//        qDebug()<< "X:" << imageSizeX;
+//        qDebug()<< "fx:" << fx;
         imageSizeY = imageSizeX*Proportion;
 
-        qDebug()<< "Proportion: "<< Proportion;
+//        qDebug()<< "Proportion: "<< Proportion;
         fy = imageSizeY/myGrid->colCount;
-        qDebug()<< "Y:" << imageSizeY;
+//        qDebug()<< "Y:" << imageSizeY;
         cv::resize(image,image,Size(),fx,fx,INTER_AREA );
 
 
     }
-    qDebug()<< "End of Resize";
+//    qDebug()<< "End of Resize";
 
 
 }
@@ -129,6 +131,7 @@ void MainWindow::ReSizeIm(){
 
 void MainWindow::Refreshing(){
     myGrid->NextTurn();
+
     RePaintIm();
     ReSizeIm();
     QImage imgIn= QImage((uchar*) image.data, image.cols, image.rows, image.step, QImage::Format_RGB888);
@@ -136,8 +139,13 @@ void MainWindow::Refreshing(){
     //delete &image;
     image= Mat(myGrid->rowCount,myGrid->colCount,CV_8UC3, Scalar(0, 0, 0));
 
-    qDebug()<< "Image Assingned";
-    qDebug()<< "myGrid->COunt prey" << myGrid->CountPrey;
+//    qDebug()<< "Image Assingned";
+//    qDebug()<< "Turns: " << myGrid->turnsCount;
+//    qDebug()<< "myGrid->COunt prey: " << myGrid->CountPrey;
+//    qDebug()<< "myGrid->COunt pred" << myGrid->CountPredator;
+//    qDebug()<< "myGrid->Status: " << myGrid->theGrid[22][22].status;
+//    qDebug()<< "myGrid->COunt neigh prey: " << myGrid->theGrid[22][22].preyInNeighbourhood;
+//    qDebug()<< "myGrid->COunt neigh prey: " << myGrid->theGrid[22][22].preyInNeighbourhood;
     //Sleep(500);
 }
 

@@ -205,11 +205,14 @@ counts the number
 ----------------------------*/
 void grid::CountStatusInNeighbourdhoods(){
     int countPreds, countPreys, countEmptys= 0;
+    int countPredsOld, countPreysOld;
     //Go 1-by-1
     for(int i=0; i<colCount; i++){
         for(int j=0; j<rowCount;j++){
              countPreds = 0;
              countPreys = 0;
+             countPreysOld =0;
+             countPredsOld =0;
              countEmptys = 0;
 
 //             if(theGrid[i][j].status == thisCellStatus){
@@ -243,25 +246,40 @@ void grid::CountStatusInNeighbourdhoods(){
                 // loop in the neighboorhood
                  for(int a=initI; a<=finalI; a++){
                      for(int b=initJ; b<=finalJ;b++){
-                         if(theGrid[a][b].status == 1)
-                             countPreys++;
-                         else if(theGrid[a][b].status == 2)
+                         if(theGrid[a][b].status == 1){
+                            countPreys++;
+                            if(theGrid[a][b].age >= theGrid[a][b].BreedingAge)
+                                countPreysOld++;
+                         }
+
+                         else if(theGrid[a][b].status == 2){
                              countPreds++;
+                             if(theGrid[a][b].age >= theGrid[a][b].BreedingAge)
+                                 countPredsOld++;
+                         }
                          else
                              countEmptys++;
                       }
                      }
 
                  // Since we are including the Cell status as part of the neighbourhood
-                 if(theGrid[i][j].status == 1)
+                 if(theGrid[i][j].status == 1){
                      countPreys--;
-                 else if(theGrid[i][j].status == 2)
+//                     if(theGrid[i][j].age >= theGrid[i][j].BreedingAge)
+//                         countPreysOld--;
+                 }
+                 else if(theGrid[i][j].status == 2){
                      countPreds --;
+//                     if(theGrid[i][j].age >= theGrid[i][j].BreedingAge)
+//                         countPredsOld--;
+                 }
                  else
                      countEmptys--;
 
                     theGrid[i][j].predatorsInNeighbourhood = countPreds;
+                    theGrid[i][j].maturePredatorInNeighbourhood = countPredsOld;
                     theGrid[i][j].preyInNeighbourhood = countPreys;
+                    theGrid[i][j].maturePreyInNeighbourhood = countPreysOld;
 
 //             }
 

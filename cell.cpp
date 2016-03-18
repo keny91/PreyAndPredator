@@ -90,9 +90,9 @@ void cell::SetPrey(){
     RandomDeathProbability = 0;
     RollLimit = 0;
     color = new int[2]; //RGB
-    color[0] = 150;
-    color[1] = 30;
-    color[2] = 150;
+    color[0] = 255;
+    color[1] = 255;
+    color[2] = 0;
 
     //Neighbourhood operations
     predatorsInNeighbourhood = 0;
@@ -161,6 +161,8 @@ void cell::Breed(){
     if(status == 0){  // Only if Cell is Empty
         // Case: 1 predator
         if(maturePreyInNeighbourhood >= BreedingNeighboursRequiredOnAge &&  preyInNeighbourhood >=BreedingNeighboursRequired){
+//           qDebug() << "set prey";
+//           qDebug() << maturePreyInNeighbourhood;
            SetPrey();
         }
         // Case: 2 prey
