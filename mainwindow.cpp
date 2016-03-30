@@ -8,7 +8,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     myGrid = new grid(300,300);
-
+    MiniGrid * myMini = new MiniGrid(10,10);
     image= Mat(myGrid->rowCount,myGrid->colCount,CV_8UC3, Scalar(0, 0, 0));
     //Mat  image =  Mat( Mat::zeros(myGrid->rowCount, myGrid->colCount, CV_32F) );
 //    qDebug()<< "Mat created";

@@ -9,7 +9,7 @@
 #include <iostream>
 #include "grid.h"
 #include <QTimer>
-
+#include "minigrid.h"
 #include <opencv2/opencv.hpp>
 #include <opencv/highgui.h>
 using namespace cv;

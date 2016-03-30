@@ -102,6 +102,31 @@ void cell::SetPrey(){
     EmptyInNeighbourhood = 0;
 }
 
+
+
+void cell::SetNull(){
+    status = -1;
+    age = -1;
+    BreedingAge = -1;
+    BreedingNeighboursRequired = -1;
+    BreedingNeighboursRequiredOnAge = -1;
+    OldAge = -1;
+    RandomDeathProbability = -1;
+    RollLimit = -1;
+    color = new int[2]; //RGB
+    color[0] = 255;
+    color[1] = 255;
+    color[2] = 255;
+
+    //Neighbourhood operations
+    predatorsInNeighbourhood = 0;
+    preyInNeighbourhood = 0;
+    maturePreyInNeighbourhood = 0;
+    maturePredatorInNeighbourhood = 0;
+    EmptyInNeighbourhood = 0;
+
+}
+
 cell::~cell()
 {
 

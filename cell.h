@@ -42,6 +42,7 @@ public:
     void SetPredator();
     void SetPrey();
     void SetEmpty();
+    void SetNull();
 
     //CheckType
     bool isPredator();

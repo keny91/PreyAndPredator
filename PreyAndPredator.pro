@@ -38,11 +38,11 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     grid.cpp \
     cell.cpp \
-    preycell.cpp
+    minigrid.cpp
 
 HEADERS  += mainwindow.h \
     grid.h \
     cell.h \
-    preycell.h
+    minigrid.h
 
 FORMS    += mainwindow.ui
