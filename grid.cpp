@@ -265,13 +265,13 @@ void grid::CountStatusInNeighbourdhoods(){
                  // Since we are including the Cell status as part of the neighbourhood
                  if(theGrid[i][j].status == 1){
                      countPreys--;
-//                     if(theGrid[i][j].age >= theGrid[i][j].BreedingAge)
-//                         countPreysOld--;
+                     if(theGrid[i][j].age >= theGrid[i][j].BreedingAge)
+                         countPreysOld--;
                  }
                  else if(theGrid[i][j].status == 2){
                      countPreds --;
-//                     if(theGrid[i][j].age >= theGrid[i][j].BreedingAge)
-//                         countPredsOld--;
+                     if(theGrid[i][j].age >= theGrid[i][j].BreedingAge)
+                         countPredsOld--;
                  }
                  else
                      countEmptys--;
@@ -305,6 +305,7 @@ void grid::NextTurn(){
         for(int j = 0; j< rowCount;j++){
             theGrid[i][j].Breed();
             theGrid[i][j].Dies(randSeed);
+            randSeed++;
         }
     }
 

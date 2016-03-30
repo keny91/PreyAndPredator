@@ -59,7 +59,7 @@ void cell::SetEmpty(){
 }
 
 void cell::SetPredator(){
-    age = -1;  // original age for sharks is -1
+    age = 1;  // original age for sharks is 1
     BreedingAge = 3;
     OldAge = 20;
     status = 2;
@@ -160,13 +160,13 @@ Breed:  same species in neigbourhoods >= 4
 void cell::Breed(){
     if(status == 0){  // Only if Cell is Empty
         // Case: 1 predator
-        if(maturePreyInNeighbourhood >= BreedingNeighboursRequiredOnAge &&  preyInNeighbourhood >=BreedingNeighboursRequired){
+        if(maturePreyInNeighbourhood >= BreedingNeighboursRequiredOnAge &&  preyInNeighbourhood >=BreedingNeighboursRequired && predatorsInNeighbourhood<4){
 //           qDebug() << "set prey";
 //           qDebug() << maturePreyInNeighbourhood;
            SetPrey();
         }
         // Case: 2 prey
-        else if(maturePredatorInNeighbourhood >= BreedingNeighboursRequiredOnAge &&  predatorsInNeighbourhood >=BreedingNeighboursRequired){
+        else if(maturePredatorInNeighbourhood >= BreedingNeighboursRequiredOnAge &&  predatorsInNeighbourhood >=BreedingNeighboursRequired && preyInNeighbourhood<4){
            SetPredator();
         }
     }
