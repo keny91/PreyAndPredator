@@ -8,6 +8,7 @@
 #include <QtCore>
 #include <iostream>
 #include "grid.h"
+#include <time.h>
 #include <QTimer>
 #include "minigrid.h"
 #include <opencv2/opencv.hpp>

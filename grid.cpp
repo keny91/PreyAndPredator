@@ -294,7 +294,7 @@ void grid::CountStatusInNeighbourdhoods(){
 
 
 /*NextTurn: ---------------------------
-
+    Does a set of process that conform a cycle
 ----------------------------------*/
 void grid::NextTurn(){
 
@@ -319,7 +319,7 @@ void grid::NextTurn(){
 
 
 /*---------------------------
-
+DESTRUCTOR
 ----------------------------*/
 grid::~grid(){
 //    for(int i=0; i<rowCount; i++){

@@ -15,6 +15,7 @@
 0->Empty Cell
 1->Prey Cell
 2->Predator Cell
+-1-> NULL Cell
 ----------------------------*/
 
 

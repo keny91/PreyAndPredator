@@ -9,6 +9,13 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     myGrid = new grid(300,300);
     MiniGrid * myMini = new MiniGrid(10,10);
+//    qDebug()<< myMini->rowCount;
+//    qDebug()<< "TRY1: " << myMini->theGrid[1][0].status;
+//    myMini->setLeftNull();
+//    qDebug()<< "TRY2: " << myMini->theGrid[1][0].status;
+
+
+
     image= Mat(myGrid->rowCount,myGrid->colCount,CV_8UC3, Scalar(0, 0, 0));
     //Mat  image =  Mat( Mat::zeros(myGrid->rowCount, myGrid->colCount, CV_32F) );
 //    qDebug()<< "Mat created";
@@ -130,16 +137,35 @@ void MainWindow::ReSizeIm(){
 
 
 void MainWindow::Refreshing(){
+    clock_t time1, time2,time3;
+    time1 = clock();
     myGrid->NextTurn();
+    time2 = clock();
 
-    RePaintIm();
-    ReSizeIm();
-    QImage imgIn= QImage((uchar*) image.data, image.cols, image.rows, image.step, QImage::Format_RGB888);
-    ui->label->setPixmap(QPixmap::fromImage(imgIn));
-    //delete &image;
-    image= Mat(myGrid->rowCount,myGrid->colCount,CV_8UC3, Scalar(0, 0, 0));
 
-//    qDebug()<< "Image Assingned";
+    if((myGrid->turnsCount % 100) == 0 || myGrid->turnsCount == 1){
+        RePaintIm();
+        ReSizeIm();
+        QImage imgIn= QImage((uchar*) image.data, image.cols, image.rows, image.step, QImage::Format_RGB888);
+        ui->label->setPixmap(QPixmap::fromImage(imgIn));
+        //delete &image;
+        image= Mat(myGrid->rowCount,myGrid->colCount,CV_8UC3, Scalar(0, 0, 0));
+        time3 = clock();
+        stringstream labText;
+        labText << myGrid->turnsCount;
+        QString QStr = QString::fromStdString(labText.str());
+        ui->label_3->setText(QStr);
+//        QLineEdit * lineedit = new QLineEdit;
+//        lay2->addWidget(lineedit);
+
+//        QLabel * label = edit->findChild<QLabel*>("label_3");
+//        label->setText(lineedit->text());
+    }
+
+//      qDebug()<< myGrid->turnsCount;
+//      qDebug()<< myGrid->turnsCount % 100;
+//    qDebug()<< "ProcessTime:" << time2-time1;
+//    qDebug()<< "ProcessTime with :" << time3-time1;
 //    qDebug()<< "Turns: " << myGrid->turnsCount;
 //    qDebug()<< "myGrid->COunt prey: " << myGrid->CountPrey;
 //    qDebug()<< "myGrid->COunt pred" << myGrid->CountPredator;

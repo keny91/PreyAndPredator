@@ -7,7 +7,11 @@ MiniGrid::MiniGrid()
 }
 
 
-MiniGrid:: MiniGrid(int col,int row ){
+/*---------------------------
+CONSTRUCTORS; default grid 100x100
+----------------------------*/
+
+MiniGrid:: MiniGrid(int col = 100,int row = 100){
     randSeed=0;
     CountEmpty=0;
     CountPredator =0;
@@ -27,6 +31,13 @@ MiniGrid:: MiniGrid(int col,int row ){
 
 
 
+
+/*SetNullX: ---------------------------
+    Depending on the selected border,
+    we initilized all cells to be NULL
+    Null Cells have no functionality
+----------------------------------*/
+
 void MiniGrid::setTopNull(){
 
     for(int i = 0; i< colCount; i++)
@@ -36,19 +47,22 @@ void MiniGrid::setTopNull(){
 
 void MiniGrid::setBotNull(){
 
-
+    for(int i = 0; i< colCount; i++)
+        theGrid[rowCount-1][i].SetNull();
 
 }
 
 
 void MiniGrid::setLeftNull(){
 
-
+    for(int i = 0; i< rowCount; i++)
+        theGrid[i][0].SetNull();
 
 }
 
 void MiniGrid::setRightNull(){
 
-
+    for(int i = 0; i< rowCount; i++)
+        theGrid[i][colCount-1].SetNull();
 
 }
