@@ -11,12 +11,15 @@ MiniGrid::MiniGrid()
 CONSTRUCTORS; default grid 100x100
 ----------------------------*/
 
-MiniGrid:: MiniGrid(int col = 100,int row = 100){
+MiniGrid:: MiniGrid(int col,int row,int Xcoor, int General){
+    indexX = Xcoor;
+//    indexY = Ycoor;
+    indexGeneral = General;
     randSeed=0;
     CountEmpty=0;
     CountPredator =0;
     CountPrey = 0;
-    rowCount=row+2;
+    rowCount=row;
     colCount=col+2;
     turnsCount = 0;
     cellsDeleted = 0;
@@ -26,7 +29,6 @@ MiniGrid:: MiniGrid(int col = 100,int row = 100){
         theGrid[i]= new cell[rowCount];
 
     }
-
 }
 
 
@@ -40,29 +42,34 @@ MiniGrid:: MiniGrid(int col = 100,int row = 100){
 
 void MiniGrid::setTopNull(){
 
-    for(int i = 0; i< colCount; i++)
+    qDebug() << "TOP";
+    for(int i = 0; i< rowCount; i++)
         theGrid[0][i].SetNull();
 
 }
 
 void MiniGrid::setBotNull(){
 
-    for(int i = 0; i< colCount; i++)
-        theGrid[rowCount-1][i].SetNull();
+    qDebug() << "BOT";
+    for(int i = 0; i< rowCount; i++)
+        theGrid[colCount-1][i].SetNull();
 
 }
 
 
 void MiniGrid::setLeftNull(){
 
-    for(int i = 0; i< rowCount; i++)
+    qDebug() << "LEFT";
+    for(int i = 0; i< colCount; i++){
+//        qDebug() << i;
         theGrid[i][0].SetNull();
-
+    }
 }
 
 void MiniGrid::setRightNull(){
 
-    for(int i = 0; i< rowCount; i++)
-        theGrid[i][colCount-1].SetNull();
+    qDebug() << "RIGHT";
+    for(int i = 0; i< colCount; i++)
+        theGrid[i][rowCount-1].SetNull();
 
 }

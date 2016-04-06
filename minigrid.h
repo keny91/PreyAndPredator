@@ -7,7 +7,9 @@ class MiniGrid : public grid
 {
 public:
     MiniGrid();
-    MiniGrid(int col,int row );
+    MiniGrid(int col,int row , int X, int General);
+
+    int indexX, indexY, indexGeneral;
 
     void setTopNull();
     void setBotNull();

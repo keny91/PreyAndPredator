@@ -8,11 +8,26 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     myGrid = new grid(300,300);
-    MiniGrid * myMini = new MiniGrid(10,10);
-//    qDebug()<< myMini->rowCount;
+//    NCols,NRows , i, j, count
+    qDebug()<< "Reached 2 ";
+
+    myBigGrid = BigGrid(10,100,myGrid->rowCount);
+    qDebug() << myBigGrid.multiGrid[1].indexGeneral ;
+    qDebug() << myBigGrid.multiGrid[0].theGrid[0][0].status;
+//    MiniGrid * myMini = new MiniGrid(100,100,1,1,1);
+//    qDebug()<< "Reached 2 ";
+
+    qDebug()<< myBigGrid.multiGrid[0].theGrid[0][0].status;
+//               myMini->rowCount;
 //    qDebug()<< "TRY1: " << myMini->theGrid[1][0].status;
+//    myBigGrid.multiGrid[0][0].setTopNull();
 //    myMini->setLeftNull();
-//    qDebug()<< "TRY2: " << myMini->theGrid[1][0].status;
+////    qDebug()<< "TRY2: " << myMini->theGrid[1][0].status;
+///
+//  See that left and rightmost columns are null
+    qDebug()<< "TRY1: " << myBigGrid.multiGrid[0].theGrid[1][0].status;
+    qDebug()<< "TRY2: " << myBigGrid.multiGrid[myBigGrid.numCols-1].theGrid[0][myBigGrid.multiGrid->rowCount-1].status;
+
 
 
 
@@ -51,11 +66,7 @@ MainWindow::MainWindow(QWidget *parent) :
 ------------------------------*/
 void MainWindow::RePaintIm(){
 
-//    qDebug()<< image.at<Vec3b>(Point(16,1))[1];
-//    qDebug()<< myGrid->colCount ;
-//    qDebug()<< image.cols ;
-//    qDebug()<< myGrid->rowCount ;
-//    qDebug()<< image.rows ;
+
     int r = 0;
     int c = 0;
 
@@ -70,9 +81,6 @@ void MainWindow::RePaintIm(){
                 image.at<cv::Vec3b>(Point(i,j)) = color;
 //                qDebug()<< "r: " << r << " ---c: " << c ;
                 c = c+1;
-//            Scalar color= Scalar(myGrid->theGrid[i][j].color[0],myGrid->theGrid[i][j].color[1],myGrid->theGrid[i][j].color[2]);
-//            image.at<cv::Vec3b>(Point(i,j)) = color;
-
 
         }
     c=0;
@@ -133,6 +141,30 @@ void MainWindow::ReSizeIm(){
 
 
 }
+
+
+
+/*GridToMatrix:-----------------
+        Read the Multigrid into a int matrix.
+------------------------------*/
+void MainWindow::GridToMatrix(){
+
+
+
+}
+
+
+/*RepaintBigGrid:-----------------
+        Paint the image according to the grid cells.
+------------------------------*/
+
+void MainWindow::RepaintMatrix(){
+
+
+
+}
+
+
 
 
 

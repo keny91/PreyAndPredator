@@ -11,6 +11,7 @@
 #include <time.h>
 #include <QTimer>
 #include "minigrid.h"
+#include "biggrid.h"
 #include <opencv2/opencv.hpp>
 #include <opencv/highgui.h>
 using namespace cv;
@@ -31,8 +32,12 @@ public:
     void ReSizeIm();
     void RePaintIm();
 
+    void RepaintBigGrid();
+    void GridToMatrix();
+
     ~MainWindow();
     grid *myGrid;
+    BigGrid myBigGrid;
     Mat image;
 
 
