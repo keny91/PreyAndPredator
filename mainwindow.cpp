@@ -7,7 +7,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    myGrid = new grid(30,30);
+//    myGrid = new grid(30,30);
 //    NCols,NRows , i, j, count
 
 
@@ -15,9 +15,9 @@ MainWindow::MainWindow(QWidget *parent) :
     //Initialization of grid
 
     // Set dimensions
-    height = 1000;
-    width = 2000;
-    Nblocks = 20;
+    height = 100;
+    width = 300;
+    Nblocks = 3;
 
     frame = new int *[width];
     for(int i =0; i<width ; i++){
@@ -58,24 +58,11 @@ MainWindow::MainWindow(QWidget *parent) :
     QTimer *mytimer = new QTimer(this);
 
     connect(mytimer, SIGNAL(timeout()), this,SLOT(Refreshing()));
-    mytimer->start(10);  // Change to speed up
-//    qDebug()<< "Start Color Assingment" ;
+    mytimer->start(1);  // Change to speed up
 
 
+//  myGrid->InitGridWithStandardCells();
 
-    /*Infectation spread:----------
-            Paint the image according to the grid cells.
-    ---------------------------*/
-    //myGrid->theGrid[1][1].SetInfected();
-
-  myGrid->InitGridWithStandardCells();
-//  myGrid->theGrid[22][22].SetEmpty();
-//    qDebug()<< "myGrid" << myGrid->theGrid[0][0].status;
-//    qDebug()<< "myGrid2" << myGrid->theGrid[1][0].status;
-//    qDebug()<< "myGrid3" << myGrid->theGrid[2][0].status;
-//    qDebug()<< "myGrid4" << myGrid->theGrid[3][0].status;
-//    qDebug()<< "myGrid5" << myGrid->theGrid[4][0].status;
-//    qDebug()<< "myGrid6" << myGrid->theGrid[5][0].status;
 }
 
 
@@ -173,8 +160,6 @@ void MainWindow::GridToMatrix(){
 
     //ADD THREADS HERE
     int miniBlockWidth = width/Nblocks;
-    qDebug()<< "W Block Search: " << miniBlockWidth << "  Actual W Block: " << myBigGrid.multiGrid[0].colCount;
-    qDebug()<< "H Block Search: " << height << "  Actual H Block: " << myBigGrid.multiGrid[0].rowCount;
 
 
     for(int block = 0; block< Nblocks; block++){
@@ -188,9 +173,6 @@ void MainWindow::GridToMatrix(){
 
 
     }
-        qDebug()<< "SHOULD BE:" << myBigGrid.multiGrid[0].theGrid[100][2].status;
-        qDebug()<< "End of Resize" << frame[99][2];
-
 }
 
 
@@ -201,7 +183,7 @@ void MainWindow::GridToMatrix(){
 void MainWindow::RepaintBigGrid(){
 
 
-    qDebug()<< "Start Color Assingment" ;
+//    qDebug()<< "Start Color Assingment" ;
     for(int i = 0; i < width;i++){
         for(int j = 0; j< height;j++){
 
@@ -230,7 +212,7 @@ void MainWindow::RepaintBigGrid(){
                     color[0] = 50;
                     color[1] = 50;
                     color[2] = 50;
-
+                    qDebug() << "paint error: should not appear";
                 }
 
                 image.at<cv::Vec3b>(Point(i,j)) = color;
@@ -239,7 +221,7 @@ void MainWindow::RepaintBigGrid(){
         }
     }
 
-    qDebug()<< "END Color Assingment" ;
+//    qDebug()<< "END Color Assingment" ;
 
 }
 
@@ -250,21 +232,25 @@ void MainWindow::RepaintBigGrid(){
 void MainWindow::Refreshing(){
     clock_t time1, time2,time3;
     time1 = clock();
-    myGrid->NextTurn();
+//    myGrid->NextTurn();
+    myBigGrid.NextTurnBigGrid();
+    qDebug() << myBigGrid.turnsCount;
     time2 = clock();
 
 
-    if((myGrid->turnsCount % 100) == 0 || myGrid->turnsCount == 1){
+//    if((myBigGrid.turnsCount % 100) == 0 || myBigGrid.turnsCount == 1){
 //        RePaintIm();
+        GridToMatrix();
         RepaintBigGrid();
         ReSizeIm();
         QImage imgIn= QImage((uchar*) image.data, image.cols, image.rows, image.step, QImage::Format_RGB888);
         ui->label->setPixmap(QPixmap::fromImage(imgIn));
-        //delete &image;
+
+
         image= Mat(height,width,CV_8UC3, Scalar(0, 0, 0));
         time3 = clock();
         stringstream labText;
-        labText << myGrid->turnsCount;
+        labText << myBigGrid.turnsCount;
         QString QStr = QString::fromStdString(labText.str());
         ui->label_3->setText(QStr);
 //        QLineEdit * lineedit = new QLineEdit;
@@ -272,19 +258,8 @@ void MainWindow::Refreshing(){
 
 //        QLabel * label = edit->findChild<QLabel*>("label_3");
 //        label->setText(lineedit->text());
-    }
+//    }
 
-//      qDebug()<< myGrid->turnsCount;
-//      qDebug()<< myGrid->turnsCount % 100;
-//    qDebug()<< "ProcessTime:" << time2-time1;
-//    qDebug()<< "ProcessTime with :" << time3-time1;
-//    qDebug()<< "Turns: " << myGrid->turnsCount;
-//    qDebug()<< "myGrid->COunt prey: " << myGrid->CountPrey;
-//    qDebug()<< "myGrid->COunt pred" << myGrid->CountPredator;
-//    qDebug()<< "myGrid->Status: " << myGrid->theGrid[22][22].status;
-//    qDebug()<< "myGrid->COunt neigh prey: " << myGrid->theGrid[22][22].preyInNeighbourhood;
-//    qDebug()<< "myGrid->COunt neigh prey: " << myGrid->theGrid[22][22].preyInNeighbourhood;
-    //Sleep(500);
 }
 
 

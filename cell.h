@@ -26,7 +26,7 @@ public:
     int BreedingNeighboursRequiredOnAge;
     int status;
     double RandomDeathProbability;
-    int TurnsInfected, RollLimit;
+    int RollLimit;
     int* color;
 
     //Neighbourhood operations
@@ -56,20 +56,9 @@ public:
     void IncreaseAge(int generation);
     void Breed();
     void getOlder(); // = increaseInfection
-    bool GetsRandomDeathRoll(int r, int rollLim);
+    bool GetsRandomDeathRoll(int r);
+    void CopyCell(cell* theNewCell);
 
-
-
-//    int state;
-//    int PropagationProbability, InfectedCellsInNeighboorhood,HealthyCellsInNeighboorhood;
-//    int TurnsInfected,  LifeSpanTurns, RollLimit;
-//    int* color;
-
-//    void GetsInfectedRoll();
-//    void SetInfected();
-//    void SetDeath();
-//    void SetRegular();
-//    void IncreaseInfection();
 
 
 };

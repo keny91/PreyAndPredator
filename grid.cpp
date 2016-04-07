@@ -213,11 +213,23 @@ void grid::CountCells(){
 ONLY WORKS FOR NEIGHBOURDHOOD = 1
 counts the number
 ----------------------------*/
-void grid::CountStatusInNeighbourdhoods(){
+void grid::CountStatusInNeighbourdhoods(boolean includeGhostCols){
     int countPreds, countPreys, countEmptys= 0;
     int countPredsOld, countPreysOld;
+
+    int initialColStart, finalColEnd;
+    initialColStart = 0;
+    finalColEnd = colCount;
+
+
+    if(includeGhostCols){
+        initialColStart = 1;
+        finalColEnd = colCount -1;
+    }
+
+
     //Go 1-by-1
-    for(int i=0; i<colCount; i++){
+    for(int i=initialColStart; i<finalColEnd; i++){
         for(int j=0; j<rowCount;j++){
              countPreds = 0;
              countPreys = 0;
@@ -321,8 +333,6 @@ void grid::NextTurn(){
 
     CountCells();
     turnsCount ++;
-
-
 
 }
 

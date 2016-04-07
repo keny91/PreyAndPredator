@@ -15,6 +15,10 @@ BigGrid::BigGrid(int X, int NCols, int NRows){
 //    qDebug()<< "WITH Y";
     multiGrid = new MiniGrid[X];
     numCols = X;
+    CountEmpty,CountPredator,CountPrey = 0;
+    turnsCount = 0;
+
+
     for(int n = 0; n < X; n++){
         //                qDebug() <<
 //        qDebug()<< "Reached  " << count;
@@ -98,34 +102,38 @@ void BigGrid::InitBigGrid(){
 /*FillGhostCells: ---------------------------
 ONLY DURING INITIALIZATION.
 next time the ghost cells should be filled with MPI
+POSSIBLE MEMORY LEAK
 ----------------------------------*/
 void BigGrid::FillGhostCells(){
 
     for(int block = 0; block< numCols; block++){
-
+        int miniBlockWidth = multiGrid[block].colCount;
         for(int i = 0; i<miniBlockWidth; i++){
-            for(int j =0;j < height; j++){
+            for(int j =0;j < multiGrid[block].rowCount; j++){
 
 
-
-                    for(int j = 0;j<multiGrid[block].rowCount; j++){
                         // Get data from the left
                         if(block>0){ //block!=0
+//                            delete &multiGrid[block].theGrid[0][j];
+//                            cell * cellptr;
+//                            cellptr = &multiGrid[block+1].theGrid[1][j];
                             multiGrid[block].theGrid[0][j] = multiGrid[block-1].theGrid[100][j];
+
+//                            multiGrid[block].theGrid[0][j].CopyCell(cellptr);
                         }
                         // Get data from the right
                         if(block<numCols-1){  // block!=numCols-1
+//                            cell * cellptr;
+//                            cellptr = &multiGrid[block+1].theGrid[1][j];
+//                            delete &multiGrid[block].theGrid[101][j];
                             multiGrid[block].theGrid[101][j] = multiGrid[block+1].theGrid[1][j];
+//                            multiGrid[block].theGrid[101][j].CopyCell(cellptr);
+
                         }
-
-                    }
-
-                // GetRight
 
 
             }
         }
-
 
     }
 
@@ -145,22 +153,45 @@ void BigGrid::NextTurnBigGrid(){
 
     for(int block = 0; block< numCols; block++){
 
-        multiGrid[block].CountStatusInNeighbourdhoods(); //count all cell´s neighbours
+        multiGrid[block].CountStatusInNeighbourdhoods(true); //count all cell´s neighbours
         countTheCols = multiGrid[block].colCount;
         countTheRows = multiGrid[block].rowCount;
         //CountStatusInNeighbourdhoods(0, 0); //count healthy around
         //    Do for all cells in the grid
-        for(int i = 0; i < colCount;i++){
-            for(int j = 0; j< rowCount;j++){
-                theGrid[i][j].Breed();
-                theGrid[i][j].Dies(randSeed);
-                randSeed++;
+        for(int i = 1; i < multiGrid[block].colCount-1;i++){  // Takes into account the ghostcells
+            for(int j = 0; j< multiGrid[block].rowCount;j++){
+                multiGrid[block].theGrid[i][j].Breed();
+                multiGrid[block].theGrid[i][j].Dies(multiGrid[block].randSeed);
+                multiGrid[block].randSeed++;
+                multiGrid[block].CountCells();
             }
         }
+
     }
 
-    CountCells();
+
+
+    CountCellsBigGrid();
+    FillGhostCells();
+//    qDebug() << multiGrid[0].theGrid[1][0].status;
     turnsCount ++;
 
 }
 
+
+
+
+/*CountCellsBigGrid: ---------------------------
+Uses the count of miniGrid to get a general count
+----------------------------------*/
+void BigGrid::CountCellsBigGrid(){
+        CountPredator=0;
+        CountEmpty = 0;
+        CountPrey = 0;
+        for(int block = 0; block< numCols; block++){
+//            qDebug() <<"Block " <<block <<" is: " <<multiGrid[block].CountPredator;
+            CountPredator += multiGrid[block].CountPredator;
+            CountEmpty += multiGrid[block].CountEmpty;
+            CountPrey += multiGrid[block].CountPrey;
+        }
+}

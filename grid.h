@@ -33,7 +33,7 @@ public:
     void PopulateGrid(int type, int number);
     void NextTurn();
     void CountCells();
-    void CountStatusInNeighbourdhoods();
+    void CountStatusInNeighbourdhoods(boolean includeGhostCols = false);
     grid(int row, int col);
     grid();
 

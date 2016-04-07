@@ -131,7 +131,7 @@ void cell::SetNull(){
 cell::~cell()
 {
 
-    //delete color;
+//    delete &color;
     //qDebug()<< "Cell Destructor Call";
     delete this;
 }
@@ -153,7 +153,7 @@ void cell::Dies(int r){
             SetEmpty();
         else if(age>=OldAge)
             SetEmpty();
-        else if(GetsRandomDeathRoll(r,RollLimit))
+        else if(GetsRandomDeathRoll(r))
             SetEmpty();
         else
             IncreaseAge(1);
@@ -232,7 +232,7 @@ bool cell::isEmpty(){
 //    Rolls a dice. If we get over the set probability TH, returns true.
 //----------------------------*/
 
-bool cell::GetsRandomDeathRoll(int r, int rollLim){
+bool cell::GetsRandomDeathRoll(int r){
 
     QTime now = QTime::currentTime();
     qsrand(now.msec()+r);
@@ -254,34 +254,49 @@ bool cell::GetsRandomDeathRoll(int r, int rollLim){
 }
 
 
-//*IncreaseInfection: ---------------------------
+/*---------------------------
+CopyCell:  dumps all the data in a cell
+to another
+----------------------------*/
+void cell::CopyCell(cell* theNewCell){
 
-//----------------------------------*/
-//void cell::IncreaseInfection(){
+    status = theNewCell->status;
+    age = theNewCell->age;
+    BreedingAge = theNewCell->BreedingAge;
+    OldAge = theNewCell->OldAge;
+    BreedingNeighboursRequired = theNewCell->BreedingNeighboursRequired;
+    BreedingNeighboursRequiredOnAge = theNewCell->BreedingNeighboursRequiredOnAge;
+    RandomDeathProbability = theNewCell->RandomDeathProbability;
+    RollLimit = theNewCell->RollLimit;
 
-//    if(state == 1){
-//        TurnsInfected++;
+    color = theNewCell->color;
+//    color[0] = theNewCell->color[0];
+//    color[1] = theNewCell->color[1];
+//    color[2] = theNewCell->color[2];
 
-//        if (TurnsInfected>LifeSpanTurns){  //dies
-//            SetDeath();
-//            TurnsInfected = 0;
-//        }
+    //Neighbourhood operations
+    predatorsInNeighbourhood = theNewCell->predatorsInNeighbourhood;
+    preyInNeighbourhood = theNewCell->preyInNeighbourhood;
+    maturePreyInNeighbourhood = theNewCell->maturePreyInNeighbourhood;
+    maturePredatorInNeighbourhood = theNewCell->maturePredatorInNeighbourhood;
+    EmptyInNeighbourhood = theNewCell->EmptyInNeighbourhood;
+
+//    if(theNewCell.status == 0){
+//        SetEmpty();
+//    }
+//    else if(theNewCell.status == 1){
+//        SetPrey();
+//    }
+//    else if(theNewCell.status == 2){
+//        SetPredator();
+//    }
+//    else{
+//        qDebug() << "Error, this should not be appearing";
 //    }
 
-//}
+//    age = theNewCell.age;s
 
-
-
-
-///*---------------------------
-
-//----------------------------*/
-//void cell::SetDeath(){
-//    state = 2;
-//    TurnsInfected = 0;
-//    color[0] = 10;
-//    color[1] = 10;
-//    color[2] = 10;
-//}
+//     qDebug() << "REACH 2";
+}
 
 

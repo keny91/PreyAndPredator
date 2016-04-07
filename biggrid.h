@@ -12,7 +12,9 @@ public:
     void SetNullGhostCells();
     void FillGhostCells();
     void NextTurnBigGrid();
+    void CountCellsBigGrid();
     int numCols, numRows, elementsTotal;
+    int CountPredator, CountPrey, CountEmpty, turnsCount;
     MiniGrid * multiGrid;
 };
 
