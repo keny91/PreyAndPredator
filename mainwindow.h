@@ -39,6 +39,8 @@ public:
     grid *myGrid;
     BigGrid myBigGrid;
     Mat image;
+    int height, width, Nblocks;
+    int ** frame;
 
 
 //    cell **grid;

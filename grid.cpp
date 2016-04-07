@@ -157,21 +157,31 @@ void grid::PopulateGrid(int type, int number){
 InitGridWithStandardCells: this is the default call to initialize de grid
 with 50% preys and 25% predators
 ----------------------------*/
-void grid::InitGridWithStandardCells(){
-    double TotalNumber = rowCount * colCount;
-    int NumberOfPredators = round(TotalNumber*0.25);
-    int NumberOfPreys = round(TotalNumber*0.5);
-    qDebug()<< "Generating Grid";
-    qDebug()<<" Total Number of Samples: " <<round(TotalNumber);
-    qDebug()<<" estimated number of preys: " <<NumberOfPreys;
-    qDebug()<<" estimated number of Predators: " <<NumberOfPredators;
+void grid::InitGridWithStandardCells(boolean includeGhostCols){
+    double TotalNumber;
+    int NumberOfPredators,NumberOfPreys;
+
+    if(includeGhostCols){
+        TotalNumber = rowCount * (colCount-2);  // Exclude ghost cells
+    }
+    else{
+        TotalNumber = rowCount * colCount;
+    }
+
+    NumberOfPredators = round(TotalNumber*0.25);
+    NumberOfPreys = round(TotalNumber*0.5);
+
+
+//    qDebug()<< "Generating Grid";
+//    qDebug()<<" Total Number of Samples: " <<round(TotalNumber);
+//    qDebug()<<" estimated number of preys: " <<NumberOfPreys;
+//    qDebug()<<" estimated number of Predators: " <<NumberOfPredators;
     PopulateGrid(1,NumberOfPreys);  //Adds prey
     PopulateGrid(2,NumberOfPredators);  //Adds predator
 
     CountEmpty=0;
     CountPredator =0;
     CountPrey = 0;
-    qDebug()<<"Exit Initialization";
 }
 
 

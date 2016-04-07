@@ -42,7 +42,7 @@ MiniGrid:: MiniGrid(int col,int row,int Xcoor, int General){
 
 void MiniGrid::setTopNull(){
 
-    qDebug() << "TOP";
+//    qDebug() << "TOP";
     for(int i = 0; i< rowCount; i++)
         theGrid[0][i].SetNull();
 
@@ -50,7 +50,7 @@ void MiniGrid::setTopNull(){
 
 void MiniGrid::setBotNull(){
 
-    qDebug() << "BOT";
+//    qDebug() << "BOT";
     for(int i = 0; i< rowCount; i++)
         theGrid[colCount-1][i].SetNull();
 
@@ -59,17 +59,18 @@ void MiniGrid::setBotNull(){
 
 void MiniGrid::setLeftNull(){
 
-    qDebug() << "LEFT";
-    for(int i = 0; i< colCount; i++){
+
+    for(int i = 0; i< rowCount; i++){
 //        qDebug() << i;
-        theGrid[i][0].SetNull();
+        theGrid[0][i].SetNull();
     }
+
 }
 
 void MiniGrid::setRightNull(){
 
-    qDebug() << "RIGHT";
-    for(int i = 0; i< colCount; i++)
-        theGrid[i][rowCount-1].SetNull();
+//    qDebug() << "RIGHT";
+    for(int i = 0; i< rowCount; i++)
+        theGrid[colCount-1][i].SetNull();
 
 }

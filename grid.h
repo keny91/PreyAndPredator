@@ -29,7 +29,7 @@ public:
     cell **theGrid;
 //    PreyCell * trycell;
 
-    void InitGridWithStandardCells();
+    void InitGridWithStandardCells(boolean includeGhostCols = false);
     void PopulateGrid(int type, int number);
     void NextTurn();
     void CountCells();
