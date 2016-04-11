@@ -15,9 +15,9 @@ MainWindow::MainWindow(QWidget *parent) :
     //Initialization of grid
 
     // Set dimensions
-    height = 100;
-    width = 300;
-    Nblocks = 3;
+    height = 300;
+    width = 500;
+    Nblocks = 5;
 
     frame = new int *[width];
     for(int i =0; i<width ; i++){
@@ -31,28 +31,18 @@ MainWindow::MainWindow(QWidget *parent) :
 
 //    qDebug() << "A->" << frame[1][1];
 
+    connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(pauseButtonClick()));
+    connect(ui->pushButton_2, SIGNAL(clicked()), this, SLOT(resetButtonClick()));
+
+    isRunning=true;
+    OnCooldown = false;
+
     myBigGrid = BigGrid(Nblocks,width/Nblocks,height);
     myBigGrid.InitBigGrid();
-//    qDebug() << "A->" << myBigGrid.multiGrid[0].theGrid[1][1].status;
     myBigGrid.SetNullGhostCells();
-//    qDebug() << "B->" <<myBigGrid.multiGrid[0].theGrid[1][1].status;
     GridToMatrix();
 
-//    qDebug() << myBigGrid.multiGrid[1].indexGeneral ;
-//    qDebug() << myBigGrid.multiGrid[0].theGrid[0][0].status;
-//    MiniGrid * myMini = new MiniGrid(100,100,1,1,1);
-//    qDebug()<< "Reached 2 ";
 
-//    qDebug()<< myBigGrid.multiGrid[0].theGrid[0][0].status;
-//               myMini->rowCount;
-
-//  See that left and rightmost columns are null
-//    qDebug()<< "TRY1: " << myBigGrid.multiGrid[0].theGrid[1][0].status;
-//    qDebug()<< "TRY2: " << myBigGrid.multiGrid[myBigGrid.numCols-1].theGrid[0][myBigGrid.multiGrid->rowCount-1].status;
-//    qDebug()<< "In mini: cols: " << myBigGrid.multiGrid[0].colCount << "  rows:" << myBigGrid.multiGrid[0].rowCount;
-
-
-//    image= Mat(myGrid->rowCount,myGrid->colCount,CV_8UC3, Scalar(0, 0, 0));
     image= Mat(height,width,CV_8UC3, Scalar(0, 0, 0));
 
     QTimer *mytimer = new QTimer(this);
@@ -86,7 +76,7 @@ void MainWindow::RePaintIm(){
                 color[1] = myGrid->theGrid[i][j].color[1];
                 color[2] = myGrid->theGrid[i][j].color[2];
                 image.at<cv::Vec3b>(Point(i,j)) = color;
-//                qDebug()<< "r: " << r << " ---c: " << c ;
+
                 c = c+1;
 
         }
@@ -118,12 +108,8 @@ void MainWindow::ReSizeIm(){
         Proportion = (Cols/Rows);
         imageSizeY = MaxLenght;
         fy = imageSizeY/height;
-//        qDebug()<< "Y:" << imageSizeY;
-//        qDebug()<< "fy:" << fy;
         imageSizeX = imageSizeY*Proportion;
-//        qDebug()<< "Proportion: "<< Proportion;
         fx = imageSizeX/width;
-//        qDebug()<< "X:" << imageSizeX;
         cv::resize(image,image,Size(),fy,fy,INTER_AREA );
 
 
@@ -187,10 +173,8 @@ void MainWindow::RepaintBigGrid(){
     for(int i = 0; i < width;i++){
         for(int j = 0; j< height;j++){
 
-//                qDebug()<< frame[i][j];
-//            qDebug()<< "i:" << i << "j:"<< j ;
+
             cv::Vec3b color = image.at<Vec3b>(Point(i,j));
-//            qDebug()<< "i:" << i << "j:"<< j ;
                 if(frame[i][j]==0){
                     color[0] = 0;
                     color[1] = 0;
@@ -221,24 +205,34 @@ void MainWindow::RepaintBigGrid(){
         }
     }
 
-//    qDebug()<< "END Color Assingment" ;
-
 }
 
 
 
-
+/*Refresh:-----------------
+        All the changes from the previous generation are updated
+------------------------------*/
 
 void MainWindow::Refreshing(){
-    clock_t time1, time2,time3;
+
+
+    if(isRunning){
+      clock_t time1, time2,time3;
+
+
+
     time1 = clock();
+    TotalTime = clock();
+
 //    myGrid->NextTurn();
     myBigGrid.NextTurnBigGrid();
-    qDebug() << myBigGrid.turnsCount;
+
     time2 = clock();
+    MeanTime = time2- time1;
+//    qDebug() << myBigGrid.turnsCount;
+//    qDebug() << time2- time1;
 
-
-//    if((myBigGrid.turnsCount % 100) == 0 || myBigGrid.turnsCount == 1){
+    if((myBigGrid.turnsCount % 100) == 0 || myBigGrid.turnsCount == 1){
 //        RePaintIm();
         GridToMatrix();
         RepaintBigGrid();
@@ -248,7 +242,45 @@ void MainWindow::Refreshing(){
 
 
         image= Mat(height,width,CV_8UC3, Scalar(0, 0, 0));
-        time3 = clock();
+//        time3 = clock();
+//        qDebug() << time3- time2;
+//        stringstream labText;
+//        labText << myBigGrid.turnsCount;
+//        QString QStr = QString::fromStdString(labText.str());
+//        ui->label_3->setText(QStr);
+//        QLineEdit * lineedit = new QLineEdit;
+//        lay2->addWidget(lineedit);
+
+//        QLabel * label = edit->findChild<QLabel*>("label_3");
+//        label->setText(lineedit->text());
+    }
+
+
+            RefreshUI();
+
+             }
+}
+
+
+/*RefreshUI:-----------------
+        All the changes from the previous generation are updated
+------------------------------*/
+
+void MainWindow::RefreshUI(){
+
+    // Change LCD Displays
+    ui->lcdNumber->display(myBigGrid.CountPrey);
+    ui->lcdNumber_2->display(myBigGrid.CountPredator);
+    ui->lcdNumber_3->display(myBigGrid.CountEmpty);
+
+    qDebug()<< myBigGrid.CountPrey;
+
+    ui->lcdNumber_4->display(TotalTime);
+    ui->lcdNumber_5->display(myBigGrid.turnsCount);
+    ui->lcdNumber_6->display(MeanTime);
+
+        image= Mat(height,width,CV_8UC3, Scalar(0, 0, 0));
+
         stringstream labText;
         labText << myBigGrid.turnsCount;
         QString QStr = QString::fromStdString(labText.str());
@@ -261,6 +293,49 @@ void MainWindow::Refreshing(){
 //    }
 
 }
+
+
+
+void MainWindow::StartProcess(){
+
+    isRunning = true;
+    OnCooldown = false;
+
+
+}
+
+
+/*PUSHBUTTONS:-----------------
+        All the changes from the previous generation are updated
+------------------------------*/
+void MainWindow::pauseButtonClick(){
+
+    OnCooldown = true;
+    if (isRunning == true){
+        isRunning = false;
+        ui->pushButton->setText("Play");
+
+    }
+    else{
+        isRunning = true;
+        ui->pushButton->setText("Pause");
+    }
+    Sleep(300);
+    OnCooldown = false;
+}
+void MainWindow::resetButtonClick(){
+//    delete &myBigGrid;
+//    myBigGrid = BigGrid(Nblocks,width/Nblocks,height);
+//    myBigGrid.InitBigGrid();
+//    myBigGrid.SetNullGhostCells();
+//    GridToMatrix();
+
+
+    qDebug() << "Button deactivated";
+//    include initialize
+}
+
+
 
 
 MainWindow::~MainWindow()

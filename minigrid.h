@@ -7,6 +7,7 @@ class MiniGrid : public grid
 {
 public:
     MiniGrid();
+    ~MiniGrid();
     MiniGrid(int col,int row , int X, int General);
 
     int indexX, indexY, indexGeneral;
@@ -15,6 +16,7 @@ public:
     void setBotNull();
     void setLeftNull();
     void setRightNull();
+
 
 };
 

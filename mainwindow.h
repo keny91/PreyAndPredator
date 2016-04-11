@@ -34,6 +34,7 @@ public:
 
     void RepaintBigGrid();
     void GridToMatrix();
+    void RefreshUI();
 
     ~MainWindow();
     grid *myGrid;
@@ -41,12 +42,17 @@ public:
     Mat image;
     int height, width, Nblocks;
     int ** frame;
+    bool isRunning, OnCooldown;
+    clock_t MeanTime, TotalTime;
 
 
 //    cell **grid;
 
 public slots:
     void Refreshing();
+    void pauseButtonClick();
+    void resetButtonClick();
+    void StartProcess();
 
 
 private:

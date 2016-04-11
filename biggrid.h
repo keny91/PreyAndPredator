@@ -2,12 +2,15 @@
 #define BIGGRID_H
 
 #include "minigrid.h"
+#include <omp.h>
+#include <time.h>
 
 class BigGrid
 {
 public:
     BigGrid();
     BigGrid(int X, int NCols, int NRows);
+    ~BigGrid();
     void InitBigGrid();
     void SetNullGhostCells();
     void FillGhostCells();

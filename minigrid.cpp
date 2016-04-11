@@ -31,7 +31,24 @@ MiniGrid:: MiniGrid(int col,int row,int Xcoor, int General){
     }
 }
 
+/*---------------------------
+DESTRUCTOR; default grid 100x100
+----------------------------*/
+MiniGrid::~MiniGrid()
+{
 
+    for(int i=0; i<rowCount; i++){
+        for(int j=0; j<colCount;j++){
+            delete &theGrid[i][j];
+        }
+//        delete &theGrid[i];
+    }
+    delete theGrid;
+    //qDebug()<< theGrid[1][1].state;
+    //qDebug()<< "Destructor call to grid";
+    delete this;
+
+}
 
 
 /*SetNullX: ---------------------------

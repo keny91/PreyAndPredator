@@ -342,18 +342,15 @@ void grid::NextTurn(){
 DESTRUCTOR
 ----------------------------*/
 grid::~grid(){
-//    for(int i=0; i<rowCount; i++){
-//        for(int j=0; j<colCount;j++){
-//            theGrid[i][j].~cell();
-//            delete theGrid[i][j];
-//            cellsDeleted++;
-//            qDebug()<< cellsDeleted;
-//        }
+    for(int i=0; i<rowCount; i++){
+        for(int j=0; j<colCount;j++){
+            delete &theGrid[i][j];
+        }
 //        delete &theGrid[i];
-//    }
-//    delete theGrid;
-//    //qDebug()<< theGrid[1][1].state;
-//    //qDebug()<< "Destructor call to grid";
-//    delete this;
-    qDebug()<< "DEBUG 3";
+    }
+    delete theGrid;
+    //qDebug()<< theGrid[1][1].state;
+    //qDebug()<< "Destructor call to grid";
+    delete this;
+
 }

@@ -1,5 +1,6 @@
 #include "biggrid.h"
 
+
 BigGrid::BigGrid()
 {
 
@@ -40,15 +41,6 @@ BigGrid::BigGrid(int X, int NCols, int NRows){
 
         }
 
-//        if(m==0 && Y > 1){
-//            qDebug()<< "Reached  " << "a";
-//            aGrid->setTopNull();
-//            qDebug()<< "Reached  " << "b";
-//        }
-//        else if(m==Y-1&& Y > 1){
-//            qDebug()<< "Reached END ";
-//            aGrid->setBotNull();
-//        }
 
 //        qDebug()<< "Reached 102 ";
         multiGrid[n] = *aGrid;
@@ -63,6 +55,18 @@ BigGrid::BigGrid(int X, int NCols, int NRows){
 
 }
 
+
+/*DESTRUCTOR: ---------------------------
+CRASHES THE APP AT THE MOMENT -> minigrid may be conflicting
+----------------------------------*/
+BigGrid::~BigGrid(){
+//    for(int i=0; i<numCols; i++){
+//            delete &multiGrid[i];
+//    }
+
+//    delete this;
+
+}
 
 /*SetNullGhostCells: ---------------------------
 Using the function "InitGridWithStandardCells" from
@@ -150,29 +154,52 @@ THREADS ACT HERE, ALSO MPI
 void BigGrid::NextTurnBigGrid(){
 
     int countTheCols, countTheRows;
+    countTheCols = multiGrid[0].colCount;
+    countTheRows = multiGrid[0].rowCount;
+//    clock_t time1, time2, time3, time4;
 
-    for(int block = 0; block< numCols; block++){
+#pragma omp parallel num_threads(8)
+    {
+        //        int tid=omp_get_thread_num();
+        //        qDebug()<< "thread:" << tid;
+#pragma omp for
+        for(int block = 0; block< numCols; block++){
+            //        time1 = clock();
 
-        multiGrid[block].CountStatusInNeighbourdhoods(true); //count all cell´s neighbours
-        countTheCols = multiGrid[block].colCount;
-        countTheRows = multiGrid[block].rowCount;
-        //CountStatusInNeighbourdhoods(0, 0); //count healthy around
-        //    Do for all cells in the grid
-        for(int i = 1; i < multiGrid[block].colCount-1;i++){  // Takes into account the ghostcells
-            for(int j = 0; j< multiGrid[block].rowCount;j++){
-                multiGrid[block].theGrid[i][j].Breed();
-                multiGrid[block].theGrid[i][j].Dies(multiGrid[block].randSeed);
-                multiGrid[block].randSeed++;
-                multiGrid[block].CountCells();
+            multiGrid[block].CountStatusInNeighbourdhoods(true); //count all cell´s neighbours
+            //        time2 = clock();
+            //        qDebug() << "Status count:" <<time2- time1;
+//            int tid=omp_get_thread_num();
+//            qDebug()<< "thread:" << tid << "is in block:" << block;
+            //CountStatusInNeighbourdhoods(0, 0); //count healthy around
+            //    Do for all cells in the grid
+            for(int i = 1; i < multiGrid[block].colCount-1;i++){  // Takes into account the ghostcells
+                for(int j = 0; j< multiGrid[block].rowCount;j++){
+                    multiGrid[block].theGrid[i][j].Breed();
+                    multiGrid[block].theGrid[i][j].Dies(multiGrid[block].randSeed);
+                    multiGrid[block].randSeed++;
+
+                }
             }
-        }
+            //        time3 = clock();
+            multiGrid[block].CountCells();
+            //        qDebug() << "Status change:" <<time3- time2;
 
+        }
     }
 
+//    int tid=omp_get_thread_num();
+//    qDebug()<< "thread:" << tid << "is in END";
 
-
+//    time3 = clock();
     CountCellsBigGrid();
+//    time4 = clock();
+//    qDebug() << "Count Cells:" <<time4- time3;
+
+//    time2 = clock();
     FillGhostCells();
+//    time3 = clock();
+//    qDebug() << "Refill Ghost Cells:" <<time3- time2;
 //    qDebug() << multiGrid[0].theGrid[1][0].status;
     turnsCount ++;
 

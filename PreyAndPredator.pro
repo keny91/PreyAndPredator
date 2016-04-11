@@ -12,6 +12,9 @@ TARGET = PreyAndPredator
 TEMPLATE = app
 
 
+QMAKE_CXXFLAGS+= -openmp
+QMAKE_LFLAGS +=  -openmp
+
 INCLUDEPATH += C:\\openCV3\\opencv\\MyBuild\\install\\include
 
 LIBS += -LC:\\openCV3\\opencv\\MyBuild\\install\\x64\\vc14\\lib\
