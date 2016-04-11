@@ -21,23 +21,15 @@ BigGrid::BigGrid(int X, int NCols, int NRows){
 
 
     for(int n = 0; n < X; n++){
-        //                qDebug() <<
-//        qDebug()<< "Reached  " << count;
-        //                qDebug()<< m << "Reached  " << n;
         MiniGrid * aGrid = new MiniGrid(NCols,NRows , n, count);
-//        qDebug() <<"n=" << n;
+
 
         // This is specialized in an only COL distribution
         if(n==0  && X > 1){
-//            qDebug() << "Firstate";
             aGrid->setLeftNull();
-//            qDebug() << "SecondState";
-//            qDebug()<< "Reached EndFirstate ";
         }
         else if( n == X-1 && X > 1){
-//             qDebug() << "SecondState";
             aGrid->setRightNull();
-//            qDebug()<< "Reached END ";
 
         }
 
@@ -76,14 +68,10 @@ void BigGrid::SetNullGhostCells(){
 
     for(int n = 0; n < numCols; n++){
         if(n==0  && numCols > 1){
-//            qDebug() << "Firstate";
             multiGrid[n].setLeftNull();
-
         }
         else if( n == numCols-1 && numCols > 1){
-
             multiGrid[n].setRightNull();
-
         }
     }
 
@@ -121,7 +109,11 @@ void BigGrid::FillGhostCells(){
 //                            delete &multiGrid[block].theGrid[0][j];
 //                            cell * cellptr;
 //                            cellptr = &multiGrid[block+1].theGrid[1][j];
-                            multiGrid[block].theGrid[0][j] = multiGrid[block-1].theGrid[100][j];
+//                            delete &multiGrid[block].theGrid[0][j];
+//                            qDebug() << "HERE";
+                            cell* copy = &multiGrid[block-1].theGrid[100][j];
+                            multiGrid[block].theGrid[0][j].CopyCell(copy);
+//                            multiGrid[block].theGrid[0][j] = multiGrid[block-1].theGrid[100][j];
 
 //                            multiGrid[block].theGrid[0][j].CopyCell(cellptr);
                         }

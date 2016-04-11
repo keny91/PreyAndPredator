@@ -41,7 +41,7 @@ MainWindow::MainWindow(QWidget *parent) :
     myBigGrid.InitBigGrid();
     myBigGrid.SetNullGhostCells();
     GridToMatrix();
-
+    TotalTime = 0;
 
     image= Mat(height,width,CV_8UC3, Scalar(0, 0, 0));
 
@@ -66,6 +66,9 @@ void MainWindow::RePaintIm(){
 
     int r = 0;
     int c = 0;
+
+
+
 
 //    qDebug()<< "Start Color Assingment" ;
     for(int i = 0; i < myGrid->colCount;i++){
@@ -168,8 +171,12 @@ void MainWindow::GridToMatrix(){
 
 void MainWindow::RepaintBigGrid(){
 
+#pragma omp parallel num_threads(8)
+    {
+        //        int tid=omp_get_thread_num();
+        //        qDebug()<< "thread:" << tid;
+#pragma omp for
 
-//    qDebug()<< "Start Color Assingment" ;
     for(int i = 0; i < width;i++){
         for(int j = 0; j< height;j++){
 
@@ -205,6 +212,7 @@ void MainWindow::RepaintBigGrid(){
         }
     }
 
+    }
 }
 
 
@@ -214,7 +222,7 @@ void MainWindow::RepaintBigGrid(){
 ------------------------------*/
 
 void MainWindow::Refreshing(){
-
+//    MeanTime = 0;
 
     if(isRunning){
       clock_t time1, time2,time3;
@@ -222,13 +230,13 @@ void MainWindow::Refreshing(){
 
 
     time1 = clock();
-    TotalTime = clock();
 
 //    myGrid->NextTurn();
     myBigGrid.NextTurnBigGrid();
 
     time2 = clock();
     MeanTime = time2- time1;
+    TotalTime += time2-time1;
 //    qDebug() << myBigGrid.turnsCount;
 //    qDebug() << time2- time1;
 
@@ -242,6 +250,9 @@ void MainWindow::Refreshing(){
 
 
         image= Mat(height,width,CV_8UC3, Scalar(0, 0, 0));
+
+
+
 //        time3 = clock();
 //        qDebug() << time3- time2;
 //        stringstream labText;
@@ -254,8 +265,10 @@ void MainWindow::Refreshing(){
 //        QLabel * label = edit->findChild<QLabel*>("label_3");
 //        label->setText(lineedit->text());
     }
+    else{
 
 
+    }
             RefreshUI();
 
              }
@@ -273,11 +286,11 @@ void MainWindow::RefreshUI(){
     ui->lcdNumber_2->display(myBigGrid.CountPredator);
     ui->lcdNumber_3->display(myBigGrid.CountEmpty);
 
-    qDebug()<< myBigGrid.CountPrey;
 
-    ui->lcdNumber_4->display(TotalTime);
+
+    ui->lcdNumber_4->display(MeanTime);
     ui->lcdNumber_5->display(myBigGrid.turnsCount);
-    ui->lcdNumber_6->display(MeanTime);
+    ui->lcdNumber_6->display(TotalTime);
 
         image= Mat(height,width,CV_8UC3, Scalar(0, 0, 0));
 
@@ -285,6 +298,7 @@ void MainWindow::RefreshUI(){
         labText << myBigGrid.turnsCount;
         QString QStr = QString::fromStdString(labText.str());
         ui->label_3->setText(QStr);
+
 //        QLineEdit * lineedit = new QLineEdit;
 //        lay2->addWidget(lineedit);
 

@@ -76,8 +76,8 @@
    <widget class="QLabel" name="label_4">
     <property name="geometry">
      <rect>
-      <x>370</x>
-      <y>610</y>
+      <x>390</x>
+      <y>510</y>
       <width>91</width>
       <height>41</height>
      </rect>
@@ -96,8 +96,8 @@
    <widget class="QLabel" name="label_5">
     <property name="geometry">
      <rect>
-      <x>370</x>
-      <y>650</y>
+      <x>390</x>
+      <y>550</y>
       <width>91</width>
       <height>41</height>
      </rect>
@@ -116,8 +116,8 @@
    <widget class="QLabel" name="label_6">
     <property name="geometry">
      <rect>
-      <x>370</x>
-      <y>690</y>
+      <x>390</x>
+      <y>590</y>
       <width>131</width>
       <height>41</height>
      </rect>
@@ -136,8 +136,8 @@
    <widget class="QLabel" name="label_7">
     <property name="geometry">
      <rect>
-      <x>730</x>
-      <y>650</y>
+      <x>750</x>
+      <y>550</y>
       <width>141</width>
       <height>41</height>
      </rect>
@@ -156,8 +156,8 @@
    <widget class="QLabel" name="label_8">
     <property name="geometry">
      <rect>
-      <x>730</x>
-      <y>690</y>
+      <x>750</x>
+      <y>590</y>
       <width>201</width>
       <height>41</height>
      </rect>
@@ -179,8 +179,8 @@
    <widget class="QLabel" name="label_9">
     <property name="geometry">
      <rect>
-      <x>730</x>
-      <y>610</y>
+      <x>750</x>
+      <y>510</y>
       <width>141</width>
       <height>41</height>
      </rect>
@@ -199,8 +199,8 @@
    <widget class="QPushButton" name="pushButton">
     <property name="geometry">
      <rect>
-      <x>40</x>
-      <y>620</y>
+      <x>60</x>
+      <y>520</y>
       <width>111</width>
       <height>41</height>
      </rect>
@@ -216,8 +216,8 @@ font: 75 12pt &quot;MS Shell Dlg 2&quot;;</string>
    <widget class="QPushButton" name="pushButton_2">
     <property name="geometry">
      <rect>
-      <x>40</x>
-      <y>680</y>
+      <x>60</x>
+      <y>580</y>
       <width>111</width>
       <height>41</height>
      </rect>
@@ -233,11 +233,14 @@ font: 75 12pt &quot;MS Shell Dlg 2&quot;;</string>
    <widget class="QLCDNumber" name="lcdNumber">
     <property name="geometry">
      <rect>
-      <x>250</x>
-      <y>620</y>
+      <x>270</x>
+      <y>520</y>
       <width>101</width>
       <height>31</height>
      </rect>
+    </property>
+    <property name="smallDecimalPoint">
+     <bool>false</bool>
     </property>
     <property name="digitCount">
      <number>10</number>
@@ -246,8 +249,8 @@ font: 75 12pt &quot;MS Shell Dlg 2&quot;;</string>
    <widget class="QLCDNumber" name="lcdNumber_2">
     <property name="geometry">
      <rect>
-      <x>250</x>
-      <y>660</y>
+      <x>270</x>
+      <y>560</y>
       <width>101</width>
       <height>31</height>
      </rect>
@@ -259,8 +262,8 @@ font: 75 12pt &quot;MS Shell Dlg 2&quot;;</string>
    <widget class="QLCDNumber" name="lcdNumber_3">
     <property name="geometry">
      <rect>
-      <x>250</x>
-      <y>700</y>
+      <x>270</x>
+      <y>600</y>
       <width>101</width>
       <height>31</height>
      </rect>
@@ -272,28 +275,34 @@ font: 75 12pt &quot;MS Shell Dlg 2&quot;;</string>
    <widget class="QLCDNumber" name="lcdNumber_4">
     <property name="geometry">
      <rect>
-      <x>610</x>
-      <y>700</y>
+      <x>630</x>
+      <y>600</y>
       <width>101</width>
       <height>31</height>
      </rect>
+    </property>
+    <property name="digitCount">
+     <number>8</number>
     </property>
    </widget>
    <widget class="QLCDNumber" name="lcdNumber_5">
     <property name="geometry">
      <rect>
-      <x>610</x>
-      <y>660</y>
+      <x>630</x>
+      <y>560</y>
       <width>101</width>
       <height>31</height>
      </rect>
+    </property>
+    <property name="digitCount">
+     <number>8</number>
     </property>
    </widget>
    <widget class="QLCDNumber" name="lcdNumber_6">
     <property name="geometry">
      <rect>
-      <x>610</x>
-      <y>620</y>
+      <x>630</x>
+      <y>520</y>
       <width>101</width>
       <height>31</height>
      </rect>
